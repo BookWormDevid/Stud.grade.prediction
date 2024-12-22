@@ -1,0 +1,7 @@
+1. cd /path/to/project
+
+2. docker build -t flask-app .
+
+3. docker run -p 5000:5000 flask-app // in terminal
+
+4. launch in the docker
