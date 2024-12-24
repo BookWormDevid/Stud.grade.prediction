@@ -64,7 +64,7 @@ def predict():
         input_data_normalized = (input_data - x_min) / (x_max - x_min)
         prediction = model.predict(input_data_normalized)
         prediction = prediction.flatten()
-        return render_template('result.html', prediction=f"{prediction[0], '+-12%':.2f}")
+        return render_template('result.html', prediction=f"{prediction[0]:.2f}", "+-12%")
     except KeyError as e:
         return f"Missing field in request: {e}", 400
     except Exception as e:
