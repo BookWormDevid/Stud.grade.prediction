@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогнозирование успеваемости</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-title {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: #fff;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-title">Прогнозирование успеваемости учащихся</div>
+        <form action="/predict" method="post">
+            <div class="form-group">
+                <label for="feature1">Пол</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="gender" value="0" required> Мужской</label>
+                    <label><input type="radio" name="gender" value="1" required> Женский</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="feature2">Возраст</label>
+                <input type="number" id="age" name="age" min="15" max="22" required>
+            </div>
+            <div class="form-group">
+                <label for="feature3">Место проживания</label>
+                <select id="address" name="address" required>
+                    <option value="2">Город</option>
+                    <option value="1">Сельская местность</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="feature4">Количество членов семьи</label>
+                <select id="famsize" name="famsize" required>
+                    <option value="1">До 3-х членов семьи</option>
+                    <option value="2">Более 3-х членов семьи</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="feature5">Родители живут вместе или раздельно</label>
+                <select id="Pstatus" name="Pstatus" required>
+                    <option value="1">Вместе</option>
+                    <option value="2">Раздельно</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="feature6">Образование матери</label>
+                <select id="Medu" name="Medu" required>
+                    <option value="0">Нет</option>
+                    <option value="1">Начальное</option>
+                    <option value="2">Среднее</option>
+                    <option value="3">Второе</option>
+                    <option value="4">Высшее</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="feature7">Образование отца</label>
+                <select id="Fedu" name="Fedu" required>
+                    <option value="0">Нет</option>
+                    <option value="1">Начальное</option>
+                    <option value="2">Среднее</option>
+                    <option value="3">Второе</option>
+                    <option value="4">Высшее</option>
+                </select>
+            </div>
+            <div>
+                <div class="form-group">
+                <label for="feature8">Работа матери</label>
+                    <select id="Mjob" name="Mjob" required>
+                    <option value="1">В сфере образования</option>
+                    <option value="2">В сфере здравоохранения</option>
+                    <option value="3">Гражданская служба</option>
+                    <option value="4">На дому</option>
+                    <option value="5">Другое</option>
+                </select>    
+            </div>
+            <div class="form-group">
+                <label for="feature9">Работа отца</label>
+                <select id="Fjob" name="Fjob" required>
+                    <option value="1">В сфере образования</option>
+                    <option value="2">В сфере здравоохранения</option>
+                    <option value="3">Гражданская служба</option>
+                    <option value="4">На дому</option>
+                    <option value="5">Другое</option>
+                </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                <label for="feature10">Причина выбора университета</label>
+                    <select id="reason" name="reason" required>
+                    <option value="1">Близость к дому</option>
+                    <option value="2">Репутация университета</option>
+                    <option value="3">Специальность</option>
+                    <option value="4">Другое</option>
+                </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature11">Попечитель ученика</label>
+                        <select id="guardian" name="guardian" required>
+                        <option value="1">Мать</option>
+                        <option value="2">Отец</option>
+                        <option value="3">Другое</option>
+                    </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature12">Время в пути от дома до университета</label>
+                        <select id="traveltime" name="traveltime" required>
+                        <option value="1">Меньше 15 минут</option>
+                        <option value="2">От 15 до 30 минут</option>
+                        <option value="3">От 30 минут до 1 часа</option>
+                        <option value="4">Больше 1 часа</option>
+                    </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature13">Попечитель ученика</label>
+                        <select id="studytime" name="studytime" required>
+                        <option value="1">Меньше 2 часов</option>
+                        <option value="2">От 2 до 5 часов</option>
+                        <option value="3">От 5 до 10 часов</option>
+                        <option value="4">Больше 10 часов</option>
+                    </select>    
+            </div>
+            <div class="form-group">
+                <label for="feature14">Количество пересдач</label>
+                <input type="number" id="failures" name="failures" min="0" max="3" required>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature15">Дополнительная образовательная подготовка</label>
+                        <select id="schoolsup" name="schoolsup" required>
+                        <option value="0">Нет</option>
+                        <option value="1">Есть</option>
+                    </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature16">Семейные учебные занятия</label>
+                        <select id="famsup" name="famsup" required>
+                        <option value="0">Нет</option>
+                        <option value="1">Есть</option>
+                    </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature17">Дополнительные платные занятия</label>
+                        <select id="paid" name="paid" required>
+                        <option value="0">Нет</option>
+                        <option value="1">Есть</option>
+                    </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature18">Внеучебная деятельность</label>
+                        <select id="activities" name="activities" required>
+                        <option value="0">Нет</option>
+                        <option value="1">Есть</option>
+                    </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature19">Посещал детский сад</label>
+                        <select id="nursery" name="nursery" required>
+                        <option value="0">Нет</option>
+                        <option value="1">Есть</option>
+                    </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature20">Хочет получить высшее образование</label>
+                        <select id="higher" name="higher" required>
+                        <option value="0">Нет</option>
+                        <option value="1">Есть</option>
+                    </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature21">Есть доступ в интернет дома</label>
+                        <select id="internet" name="internet" required>
+                        <option value="0">Нет</option>
+                        <option value="1">Есть</option>
+                    </select>    
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="feature22">Есть романтические отношения</label>
+                        <select id="romantic" name="romantic" required>
+                        <option value="0">Нет</option>
+                        <option value="1">Есть</option>
+                    </select>    
+            </div>
+            <div class="form-group">
+                <label for="feature23">Качество семейных отношений</label>
+                <input type="number" id="famrel" name="famrel" min="1" max="5" required>
+            </div>
+            <div class="form-group">
+                <label for="feature24">Свободное время после школы</label>
+                <input type="number" id="freetime" name="freetime" min="1" max="5" required>
+            </div>
+            <div class="form-group">
+                <label for="feature25">Прогулки с друзьями</label>
+                <input type="number" id="goout" name="goout" min="1" max="5" required>
+            </div>
+            <div class="form-group">
+                <label for="feature26">Употребление алкоголя в рабочие дни</label>
+                <input type="number" id="Dalc" name="Dalc" min="1" max="5" required>
+            </div>
+            <div class="form-group">
+                <label for="feature27">Употребление алкоголя в выходные</label>
+                <input type="number" id="Walc" name="Walc" min="1" max="5" required>
+            </div>
+            <div class="form-group">
+                <label for="feature28">Текущее состояние здоровья</label>
+                <input type="number" id="health" name="health" min="1" max="5" required>
+            </div>
+            <div class="form-group">
+                <label for="feature29">Количество пропущенных занятий</label>
+                <input type="number" id="absences" name="absences" min="0" max="93" required>
+            </div>
+            <div class="form-group">
+                <label for="feature30">Оценка за 1 семестр</label>
+                <input type="number" id="G1" name="G1" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="feature31">Оценка за 2 семестр</label>
+                <input type="number" id="G2" name="G2" min="0" max="100" required>
+            </div>
+            <button type="submit">Прогнозировать</button>
+        </form>
+    </div>
+</body>
+</html>
+
